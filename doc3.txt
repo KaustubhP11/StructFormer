@@ -1,0 +1,587 @@
+﻿1. Document name: Handling Large Discrete Action Spaces via Dynamic Neighborhood Construction
+Section name : Introduction
+Paragraph:In deep reinforcement learning (DRL), ample methods exist to successfully handle large state spaces, but methods to handle large discrete action spaces (LDAS) remain scarce [Dulac-Arnold et al., 2021]. Still, LDAS often arise when applying DRL to real-world applications, e.g., for recommender systems [Afsar et al., 2022], portfolio optimization [Pigorsch and Schäfer, 2021], or inventory replenishment problems [Boute et al., 2022]. The decision space for such problems is often discrete and suffers from a curse of dimensionality, e.g., managing the inventory replenishment for a group of N products with each having G different order levels yields an action space of size GN . Off-the-shelf DRL algorithms – e.g., Deep Q-Networks (DQN) [Mnih et al., 2013], Deep Policy Gradients (DPG) [Silver et al., 2014], or Proximal Policy Optimization (PPO) [Schulman et al., 2017] – fail to handle such LDAS, as they require in- or output nodes for each discrete action, which renders learning accurate Q-values (in DQN) or action probabilities (in DPG or PPO) computationally intractable. To overcome this challenge, recent research suggests handling DRL problems with LDAS by learning a continuous policy and mapping its outputs to discrete actions [Dulac-Arnold et al., 2015, Chandak et al., 2019]. 
+Key words: “deep reinforcement learning, large discrete action spaces, recommender systems, portfolio optimization, inventory replenishment problems,Deep Q-Networks, Deep Policy Gradients,  Proximal Policy Optimization”
+
+
+Section name : Related Literature
+Paragraph:Factorization methods reduce the action space’s size by grouping actions and finding action representations for each grouping that are easier to learn. Sallans and Hinton [2004] and Pazis and Parr [2011] factorize the action space into binary subsets, evaluating binary actions for each subset to yield log(A) operations. Dulac-Arnold et al. [2012] combine action binarization with rollout classification policy iteration [Lagoudakis and Parr, 2003] to accelerate learning. More recently, papers enrich similarity groupings via expert demonstrations [Tennenholtz and Mannor, 2019], factor action spaces into tensors [Mahajan et al., 2021], or define symbolic representations of state-action values, using gradient-based search to derive actions [Cui and Khardon, 2016, 2018].
+Key words: “Factorization, Sallans and Hinton, Pazis and Parr, log(A) operations, Dulac-Arnold et al, binarization, Tennenholtz and Mannor, gradient-based, classification, state-action values”
+
+
+Section name : Problem Description 
+Paragraph:We study discrete, sequential decision-making problems formalized as Markov decision processes (MDPs), described by a state space S, a discrete action space A, a reward function r :S ×A→R, and transition dynamics P:S ×A×S →[0, 1]. We represent states s∈S and actions a∈A by N-and M-dimensional vectors, such that a∈N N and s∈RM. Note that we consider multi-dimensional actions, represented as a vector, to emphasize general applicability. Still, we refer to this action vector as an action in the remainder of this paper for the sake of conciseness. Let us denote a policy by π :S →A and the state-action value function by Qπ (s, a)=Eπ [ P∞ t=0 γ t rt|s, a], where γ ∈[0, 1) denotes the discount factor. We aim to find a policy that maximizes the objective function J =Ea∼π[Qπ (s, a)].
+
+
+Key words: “discrete, sequential decision-making problems, Markov decision processes,, vectors, discount factor, transition dynamics, multi-dimensional actions”
+
+
+Section name : Methodology 
+Paragraph: Figure 1 shows the rationale of our algorithm’s pipeline, which builds upon an actor-critic framework, leveraging DNC to transform the actor’s continuous output into a discrete action. Specifically, our pipeline comprises three steps. First, we use the actor’s output aˆ to generate a discrete base action a¯∈A. We then iterate between generating promising sets of discrete neighbors A′ , and evaluating those based on the respective Q-values taken from the critic. Here, we exploit the concept of SA [cf. Kochenderfer and Wheeler, 2019] to guide our search and ensure sufficient exploration of potential neighborhoods. The remainder of this section details each step of our DNC procedure and discusses our algorithmic design decisions. 
+
+
+Key words: “Methodology, rationale, DNC, discrete base, Q-values, concept of SA, potential neighborhoods, discrete neighbors, critic”
+
+
+
+
+Section name : Experimental Design
+Paragraph: We compare the performance of our algorithmic pipeline (DNC) against four benchmarks: a vanilla actor-critic algorithm (VAC), the static MinMax mapping proposed in Vanvuchelen et al. [2022], the k-nearest neighbors (knn) mapping proposed in Dulac-Arnold et al. [2015], and the learned action representation (LAR) approach proposed in Chandak et al. [2019]. To this end, VAC can be seen as a  baseline, while MinMax, knn, and LAR denote state-of-the-art benchmarks. We detail all of these benchmarks and respective hyperparameter tuning in the supplementary material.
+Key words: “vanilla actor-critic algorithm, k-nearest neighbors, learned action representation, MinMax, hyperparameter tuning, benchmarks, baseline, state-of-the-art benchmarks”
+
+
+Section name :  Numerical Result
+Paragraph:  The following synthesizes the findings of our numerical studies, focusing on the scalability and algorithmic performance of each method. All results reported correspond to runs with the best hyperparameters found for each method, executed over 10 seeds. We refer to the supplementary material for detailed results as well as for profound information on the hyperparameter tuning.
+Key words: “scalability, performance, hyperparameters, supplementary material, hyperparameter tuning”
+
+
+Section name : Conclusion
+Paragraph: In this paper, we present a novel algorithmic pipeline for deep reinforcement learning in environments with large discrete action spaces. Specifically, we propose a Dynamic Neighborhood Construction (DNC) that enables to integrate an effective continuous-to-discrete action mapping in an actor critic algorithm. Existing algorithms only perform well on medium to large action spaces, but cannot scale to non-enumerable action spaces as they either require a priori encodings of the action space, lack generalizability, or require to store the entire action space in-memory. In this context, our algorithmic pipeline shows two crucial advantages. First, it does not require enumerating the full action space, nor does it require storing the action space in-memory during the training process.
+
+
+Key words: “novel algorithmic pipeline, deep reinforcement, Dynamic Neighborhood Construction, continuous-to-discrete action mapping, lack generalizability”
+
+
+
+
+2. Document name: A Survey on Large Language Models for Recommendation
+Section name : Introduction
+Paragraph: Recommendation systems play a critical role in assisting users in finding relevant and personalized items or content. With the emergence of Large Language Models (LLMs) in Natural Language Processing (NLP), there has been a growing interest in harnessing the power of these models to enhance recommendation systems.The key advantage of incorporating LLMs into recommendation systems lies in their ability to extract high-quality representations of textual features and leverage the extensive external knowledge encoded within them [Liu et al., 2023b].
+Key words: “Large Language Models, Natural Language Processing, enhance recommendation systems, textual features, harnessing the power”
+
+
+Section name:  Modeling Paradigms and Taxonomy  
+Paragraph: The basic framework of all large language models is composed of several transformer blocks, e.g., GPT, PaLM, LLaMA, etc. The input of this architecture is generally composed of token embeddings or position embeddings and so on, while the expected output embedding or tokens can be obtained at the output module. Here, both the input and output data types are textual sequences. As shown in (1)-(3) in Figure 1, for the adaption of language models in recommendations, i.e., the modeling paradigm, existing work can be roughly divided into the following three categories:
+Key words: “basic framework, large language models, transformer blocks, embeddings, textual sequences, modeling paradigm”
+
+
+
+
+Section name:  Discriminative LLMs for Recommendation
+Paragraph: Indeed, so-called discriminative language models in the recommendation area mainly refer to those models of BERT series [Devlin et al., 2019]. Due to the expertise of discriminative language models in natural language understanding tasks, they are often considered as embedding backbones for downstream tasks. This holds true for recommendation systems as well. Most existing works align the representations of pre-trained models like BERT with the domain-specific data through fine-tuning. Additionally, some research explores training strategies like prompt tuning.
+Key words: “discriminative language models, BERT series, expertise, natural language, embedding backbones, downstream tasks, pre-trained models, domain-specific data, fine-tuning, prompt tuning”
+
+
+Section name: 3.1 Fine-tuning
+Paragraph: Fine-tuning pre-trained language models is a universal technique that has gained significant attention in various natural language processing (NLP) tasks, including recommendation systems. The idea behind fine-tuning is to take a language model, which has already learned rich linguistic representations from large-scale text data, and adapt it to a specific task or domain by further training it on task-specific data. The process of fine-tuning involves initializing the pretrained language model with its learned parameters and then training it on a recommendation-specific dataset. This dataset typically includes user-item interactions, textual descriptions of items, user profiles, and other relevant contextual information. During fine-tuning, the model’s parameters are updated based on the task-specific data, allowing it to adapt and specialize for recommendation tasks. 
+Key words: “Fine-tuning pre-trained language, universal technique, significant attention, linguistic representations, large-scale text data, task-specific data, domain, pretrained language, earned parameters, user-item interactions, textual descriptions”
+
+
+Section name:3.2 Prompt Tuning 
+Paragraph: Instead of adapting LLMs to different downstream recommendation tasks by designing specific objective functions, prompt tuning [Lester et al., 2021] tries to align the tuning object of recommendation with pre-trained loss through hard/soft prompts and label word verbalizer. For example, Penha and Hauff (2020) leveraged BERT’s Masked Language Modeling (MLM) head to uncover its understanding of item genres using cloze-style prompts. They further utilized BERT’s Next Sentence Prediction (NSP) head and similarity (SIM) of representations to compare relevant and nonrelevant search and recommendation query-document inputs.
+Key words: “downstream, specific objective functions, prompt tuning, pre-trained loss, hard/soft prompts, verbalizer, Penha and Hauff, Masked Language Modeling, cloze-style prompts, Next Sentence Prediction, similarity, relevant and nonrelevant search”
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Section name:  Generative LLMs for Recommendation
+Paragraph: Compared to discriminative models, generative models have better natural language generation capabilities. Therefore, unlike most discriminative model-based approaches that align the representation learned by LLMs to the recommendation domain, most generative model-based work translates recommendation tasks as natural language tasks, and then applies techniques such as in-context learning, prompt tuning, and instruction tuning to adapt LLMs to directly generate the recommendation results. Moreover, with the impressive capabilities demonstrated by ChatGPT, this type of work has received increased attention recently.
+Key words:  “discriminative models, natural language generation capabilities, applies techniques, n-context learning, prompt tuning, instruction tuning, impressive capabilities”
+
+
+Section name: Non-tuning Paradigm
+Paragraph:  The LLMs have shown strong zero/few-shot abilities in many unseen tasks [Brown et al., 2020; Ouyang et al., 2022]. Hence, some recent works assume LLMs already have the recommendation abilities, and attempt to trigger these abilities by introducing specific prompts. They employ the recent practice of Instruction and In-Context Learning [Brown et al., 2020] to adopt the LLMs to recommendation tasks without tuning model parameters. According to whether the prompt includes the demonstration examples, the studies in this paradigm mainly belong to the following two categories: prompting and in-context learning. 
+Key words: “strong zero/few-shot abilities, recommendation abilities, specific prompts, Instruction and In-Context Learningm, model parameters, paradigm”
+
+
+Section name: Tuning Paradigm
+Paragraph: As we mentioned above, LLMs have strong zero/few-shot abilities, and their recommendation performance can significantly surpass random guessing with appropriate prompt design. However, it is not surprising that recommendation systems constructed in this manner fail to surpass the performance of recommendation models trained specifically for a given task on specific data. Therefore, many researchers aim to enhance the recommendation ability of LLMs by further fine-tuning or prompt learning. In this paper, following [Wei et al., 2022], we categorize the paradigm of the tuning methods into two different types, respectively prompt tuning and instruction tuning. 
+Key words: “strong zero/few-shot abilities, surpass random guessing, prompt design, manner fail, performance of recommendation, specific data, enhance the recommendation ability, prompt tuning, instruction tuning”
+
+
+Section name: Findings
+Paragraph: In this survey, we systematically reviewed the application paradigms and adaptation strategies of large language models in recommendation systems, especially for generative language models. We have identified their potential to improve the performance of traditional recommendation models in specific tasks. However, it is necessary to note that the overall exploration in this field is still in the early stage.
+Key words: “paradigms, adaptation strategies, recommendation systems, generative language models”
+
+
+Section name: Model Bias
+Paragraph: Position Bias. In the generative language modeling paradigm of recommendation systems, various information such as user behavior sequences and recommended candidates are input to the language model in the form of textual sequential descriptions, which can introduce some position biases inherent in the language model itself [Lu et al., 2021]. For example, the order of candidates affects the ranking results of LLM-based recommendation models, i.e., LLM often prioritizes the items in the top order.
+Key words: “Model Bias, Position Bias, paradigm, recommendation systems, behavior sequences, language model, textual sequential descriptions, biases inherent, LLM”
+
+
+Section name: Recommendation Prompt Designing
+Paragraph: User/Item Representation. In practice, recommendation systems typically utilize a large number of discrete and continuous features to represent users and items. However, most existing LLM-based work only uses the name to represent items, and a list of item names to represent users, which is insufficient for modeling users and items accurately.
+Key words: “Recommendation Prompt Designing, User/Item Representation, recommendation systems, discrete and continuous feature, LLM-based, modeling, accurately”
+
+
+Section name: Promising Ability
+Paragraph:  Zero/Few-shot Recommendation Ability. The experimental results on multiple domain datasets indicate that LLMs possess impressive zero/few-shot abilities in various recommendation tasks [Hou et al., 2023; Liu et al., 2023a; Dai et al., 2023]. It is worth noting that few-shot learning, which is equivalent to in-context learning, does not change the parameters of LLMs.
+Key words: “Zero/Few-shot Recommendation Ability, domain datasets, zero/few-shot abilities, recommendation tasks,  few-shot learning,  in-context learning, parameters”
+
+
+Section name: Evaluation Issues
+Paragraph: Generation Controlling. As we mentioned before, many studies have employed large-scale models as recommendation systems by providing carefully designed instructions. For these LLMs, the output should strictly adhere to the given instruction format, such as providing binary responses (yes or no) or generating a ranked list. However, in practical applications, the output of LLMs may deviate from the desired output format. For instance, the model may produce responses in incorrect formats or even refuse to provide an answer [Dai et al., 2023].
+Key words: “Generation Controlling, large-scale models, recommendation systems, binary responses, ranked list, responses”
+
+
+
+
+
+
+
+
+
+
+3. Document name: How Does Pretraining Improve Discourse-Aware Translation?
+Section name: Introduction 
+Paragraph: Translating spoken language is a significantly challenging task due to its inherent characteristics such as irregular expressions and discourse properties [1, 2, 3]. In recent years, discourseaware neural machine translation (NMT) has performed better by initializing the Transformer-based [4] models with pretrained language models (PLMs) in encoder [5], decoder [6], both [7] or themselves [8]. The common assumption is that NMT models can utilize rich knowledge from PLMs to tackle complex discourse phenomena [9]. For example, some works found that better-translated results often contain more connective words [8], which can be classified as explicit with the non-tree-structure shallow discourse relations [10]. Table 1 shows an example of discourse-aware translation.
+Key words: “Translating spoken language, inherent characteristics, irregular expressions, discourse properties, discourseaware, neural machine translation (NMT), Transformer-based models, pretrained language models (PLMs), complex discourse phenomena, connective words, shallow discourse relations, discourse-aware translation”
+
+
+Section name: Methodology (2.1. Probing Discourse Knowledge)
+Paragraph: Our probing tasks mainly focus on the shallow discourse relation in a sentence with two semantic arguments [20], rather than consider the RST relations in several sentences. The shallow discourse relations can be characterized into five types: (1) Explicit relation means that the connective words in the sentence are visible; (2) Implicit relation means that the sentence has no connective words but can be annotated manually; when the sentence has no connective word but shows a discourse relation by its expressions or entities, it contains (3) AltLex or (4) EntRel relation; (5) NoRel relation means there is no discourse relation in the sentence.
+Key words: “shallow discourse relation, semantic arguments, shallow discourse relations, Explicit relation, connective words, AltLex relation, EntRel relation, NoRel relation”
+
+
+Section name: 2.2. Discourse-Aware NMT with Pretraining
+Paragraph: Inspired by the work of Rothe et al.[6], we adopt the following strategies to leverage the PLMs to Transformer-based NMT models: (1) For BERT models, we initialize the encoder with the PLMs and randomly initialize the decoder. (2) For GPT-2 models, we initialize the decoder with the PLMs and randomly initialize the encoder. (3) For BART models, we use them directly as a sequence-to-sequence model. The three models are trained on Chinese data. We also exploit Chinese and English versions for all three types of PLMs, and multilingual-BERT to investigate whether discourse knowledge in the source or target language is more significant to discourse-aware translation. For a fair comparison, all models have similar size of parameters.
+Key words: “leverage the PLMs, Transformer-based NMT models, BERT models, initialize the decoder, GPT-2 models, BART models, sequence-to-sequence model, Chinese data, multilingual-BERT, discourse, discourse-aware translation, parameters”
+
+
+Section name: Experiments (3.1. Experimental Setup)
+Paragraph: We summarize all data used in experiments in Table 2. For probing tasks, we conduct experiments on PDTB2.0 [18], which only contains English data. We simplify the discourse relation labels from 35 to 19 based on the strategy from [25]. EntRel and NoRel are also included as individual labels to consider as many shallow discourse phenomena as possible. For discourse-aware NMT, we conduct experiments on IWSLT2017 Chinese-English dataset. IWSLT2017 is generated from TED talk, which is a spoken language dataset and has coherent sentences. According to our translation tasks, the adjacent sentences in the dataset can be combined as translation units for their discourse relation. 
+Key words: “PDTB2.0, English data, discourse relation, EntRel, NoRel, shallow discourse phenomena, discourse-aware NMT, IWSLT2017 Chinese-English dataset, TED talk, coherent, discourse relation”
+
+
+Section name: 3.2. Results of Probing Task 
+Paragraph: In Figure 2(a), we present the first probing task performance for three basic models generated from the 12 layers. For the accuracy of all models’ layers under 0.6, it seems that PLMs have a weaker capture ability in discourse than other linguistic knowledge [27]. It’s clear that BART, as an encoder-decoder model, is the best among the three models. BART has a process of gradual increase in discourse knowledge in both all encoder layers and decoder layers 7-10. In BERT, the average pooling of embeddings can extract more discourse knowledge than the [CLS] embeddings. Both BART and BERT have their discourseaware layer in the ninth layer and have a significant decline after the discourse-aware layer. Different from the other two PLMs, GPT-2 has its strongest discourse-aware capability in the first layer and then continually decreases in the after layers.
+Key words: “probing task, accuracy, PLM, discourse, linguistic knowledge, BART, 
+encoder-decoder model, discourse knowledge, encoder layers, decoder layers, BERT, pooling, CLS, discourseaware layer, GPT-2, discourse-aware”
+
+
+Section name: 3.3. Fine-grained Analysis 
+Paragraph: As observed, the embeddings of connective words within most layers of PLMs encompass discourse knowledge. In Figure 3, we further investigate the effects of three pretrained models on three types of discourse relations. As seen, the accuracies of Implicit (IMP) and AltLex (ALT) relations are comparable and notably lower than that of the Explicit (EXP) relation. Based on these consistent phenomena observed across the three models, we can reaffirm the conclusion drawn in Section 3.2 that connective words serve as essential elements for PLMs in comprehending discourse relations. 
+Key words: “embeddings, connective words, discourse knowledge, pretrained models, discourse relations, Implicit (IMP) relations, AltLex (ALT) relations, Explicit (EXP) relation, consistent phenomena, PLMs”
+
+
+Section name: 3.4. Results of Translation Task
+Paragraph: Table 3 shows the overall performance of PLMs leveraged in NMT models. Except for English BART’s TER score which is weaker than that of English BERT, BART performs best on both language versions and all. GPT-2 is the worst. As BART is an encoder-decoder model, we consider that document-level NMT task prefers PLMs with the same architecture. Besides, all three Chinese PLMs get better scores than the English PLMs. The multilingual-BERT even performs a huge improvement over all other PLMs. We consider that a PLM with the source language discourse properties will perform better than the target language.
+Key words: “NMT models, English BART’s TER score, English BERT, GPT-2, encoder-decoder model, document-level NMT, PLMs, Chinese PLMs, English PLMs, multilingual-BERT, source language discourse properties, target language”
+
+
+
+
+
+
+4. Document name: BEIR-PL: Zero Shot Information Retrieval Benchmark for the         Polish Language
+Section name:  Introduction
+Paragraph: Modern natural language processing (NLP) applications often require support from efficient information retrieval (IR) processes, e.g. in order to efficiently acquire and accurately pre-filter texts. An IR component is necessary in the case of many NLP tasks such as Question Answering, Entity Linking, or Abstractive Summarization. Recently, classic IR models based on lexical matching are typically combined with neural retrievers utilizing large pre-trained language models. The neural language models based on the transformer architecture facilitate solving NLP problems in a multilingual setting due to their cross-lingual alignment originating from pre-training on parallel corpora. Such models have achieved promising results in a zero-shot setting, in which the model is trained only on the source language data only and evaluated on the target.
+Key words: “Modern natural language processing, information retrieval, acquire, IR component, Entity Linking, Abstractive Summarization, lexical matching,  neural retrievers, The neural language models, architecture facilitate, multilingual setting, cross-lingual alignment, parallel corpora,  source language data, evaluated”
+
+
+Section name: Related work
+Paragraph: We built upon the idea of the BEIR benchmark dataset [29], as it is precisely focused on the zero-shot evaluation of modern IR systems. Neural IR systems are trained on large datasets such as MS MARCO [4], or synthetic datasets derived from large pre-trained generative language models [3]. MS MARCO has been translated into many different languages [4], but not to Polish, yet. Moreover, even other extensive multilingual benchmarks for IR such as Mr. TYDI [36] – covering many topologically diverse languages – do not include Polish data and includes so far only one Slavic language, namely Russian. The two most commonly used and recent benchmarks for the Polish language technology, namely KLEJ [28] and Lepiszcze [1] contain evaluation data for many distinct NLP tasks, but none of them is directly related to IR tasks. 
+Key words: “BEIR benchmark dataset,  evaluation of modern IR systems, Neural IR systems, MS MARCO, synthetic datasets, MS MARCO, multilingual benchmarks, diverse languages, Slavic language, distinct NLP tasks”
+
+
+Section name: 2.1 Passage Retrieval
+Paragraph: The task of IR is to search for and return documents (i.e. any indexed text objects) that are relevant to a user query from a collection. Collections may consist of millions of documents, which makes the task computationally intensive. Moreover, documents and queries mostly are of significantly different lengths, the language used throughout the documents may vary (e.g., from general to specialized), and the information represented in a collection may cover a broad range of topics. Lexical approaches, e.g., TF.IDF or BM25 [27], have dominated textual IR for many years. Mainly due to manageable computational cost, but still offering decent performance. Recently, a strong trend has been observed towards developing neural retriever models that should outperform lexical approaches. Pretrained language models like BERT [8] appeared to be a good basis for dense retrieval approaches. Bi-encoder architecture as presented in dense passage retriever (DPR) [16] and sentence BERT [26] are commonly used and express high performance, especially on in-domain datasets.
+Key words: “consist of millions of documents, computationally intensive,  significantly different lengths, information represented, Lexical approaches, dominated textual IR, computational cost, lexical approaches, Pretrained language models, Bi-encoder architecture, in-domain datasets”
+
+
+Section name: 2.2 Unsupervised pretraining
+Paragraph: Unsupervised methods are mainly aimed at zero-shot schemes. In IR, most methods focus on data augmentation and generation of pseudo queries. Inverse Cloze Task (ICT) [19] resembles finding evidence to answer a question. In contrast to the standard Cloze task – predicting masked text given its context – the ICT requires anticipating the context given a sentence. The unsupervised equivalent of the question evidence pair is the sentence-context pair – the context of a sentence has semantic meaning and can be used to infer information that is not directly expressed in the sentence. Using ICT pre-training, we can achieve zero-shot evidence retrieval performance sufficient for bootstrapping the latent-variable learning. 
+Key words: “Unsupervised, zero-shot schemes, data augmentation, pseudo queries, Inverse Cloze Task (ICT), standard Cloze task, masked text, semantic, pre-training, bootstrapping, latent-variable learning”
+
+
+
+
+
+
+Section name: 2.3 Passage Re-ranking
+Paragraph: BERT [8] enabled approaches based on cross-encoders, e.g., [26], in which we obtain a joint embedding of a document and an input query, on the token level. In this approach, BERT processes a document and a query simultaneously, scoring their relationship. Due to computational cost, cross-encoders are particularly popular in two-stage retrieval architectures. The first stage extracts the most relevant documents with a light and fast model (e.g., BM25 [27]). Cross-encoders are used in the next stage for re-ranking. A re-ranker, e.g., a crossencoder, recomputes document scores from the first stage 
+Key words: “BERT, cross-encoders, joint embedding, two-stage retrieval architectures, BM25, re-ranker, crossencoder, token, query, scoring”
+
+
+Section name: 2.4 BEIR benchmark
+Paragraph: BEIR is a benchmark for zero-shot IR encompassing various tasks – their sizes are shown in Table 2. The authors of BEIR benchmark aimed at obtaining a large-scale data collection representing diversified IR tasks, with various features of text data and queries, e.g. collecting queries and documents of different lengths and style, also originating from different domains, not only news or Wikipedia articles. Different domains are meant to represent real-world data settings and should be challenging for various methods. Morevower, the datasets were annotated by utilising different annotation strategies, e.g. performed by crowd-workers but also experts in specific cases. The original BEIR benchmark includes the following data subsets:
+Key words: “BEIR, benchmark, zero-shot, IR, data collection, collecting queries, Wikipedia, domains, real-world data, datasets , annotation strategies, crowd-workers”
+
+
+Section name: Methodology
+Paragraph: In this section, we present the steps taken to create BEIR-PL benchmark dataset. As our aim was to build a large-scale benchmark as reference point for comparing different IR models in Polish, we decided to translate the entire BEIR benchmark using automated Machine Translation. Subsequently, we trained and evaluated baseline models on the newly created resources. Baseline models will be publicly available to the research community. The selection of baseline models was dictated by recent advances in dense information retrieval and reranking models existing in the literature. 
+Key words: “BEIR-PL, benchmark, dataset, large-scale benchmark, IR models , Polish, BEIR, Machine Translation, baseline models, resources, research community, dense information retrieval, reranking models, literature”
+
+
+Section name: 3.1 Translation of the datasets
+Paragraph: To create a large-scale resource for information retrieval, it is necessary to obtain a significant number of annotated query-passage pairs. However, the high cost of the annotation procedure can make this infeasible. Additionally, linguistic translation from foreign languages over millions of documents is both demanding and costly. As a result, machine translation can serve as a cost-effective solution to enrich resources in low-resource languages such as Polish. In order to process and translate the available BEIR benchmark’s datasets into the Polish language, we used Google Translate service. This service has been previously used to translate mMarco [4] dataset into various languages, but unfortunately, the Polish language was not included in this study.
+Key words: “large-scale resource, information retrieval, annotated query-passage pairs, annotation, infeasible, linguistic,translation, foreign languages, machine translation, cost-effective, low-resource, Polish, translate, BEIR, benchmark, datasets, Google Translate, mMarco, dataset”
+
+
+Section name: 3.2 Baseline models 
+Paragraph: This section briefly describes the baseline IR models we used for our evaluation study. The main baseline was computed using lexical matching with the BM25 implementation from Elasticsearch engine2 . This is a standard baseline method used in IR, which has demonstrated strong performance and computational efficiency across various domains. It is also typically used in the first stage of retrieval, as shown in Figure 1. The baseline neural models can be divided into following categories:
+Key words: “baseline, IR, model, evaluation study, lexical matching, BM25, Elasticsearch engine2, performance, efficiency, domains, retrieval, neural models”
+
+
+Section name: 3.2.1 Unsupervised dense bi-encoder
+Paragraph: To evaluate the unsupervised models and check how well they are performing on the benchmark data, we decided to fine-tune the HerBERT-base model [22] with ICT unsupervised tasks on BEIR-PL benchmark datasets. For each document, a pseudo-query was generated and used as a training positive instance. We utilized the model as a bi-encoder, in which it encodes queries and documents independently into single dense vector representations. Those vector representations can be compared using cosine similarity and saved to create a dense index of documents.
+Key words: “unsupervised, benchmark, data, fine-tune, HerBERT-base model, ICT, BEIR-PL, datasets, pseudo-query, bi-encoder, single dense vector representations, cosine, dense index”
+
+
+Section name: 3.2.2 HerBERT based reranker models 
+Paragraph: We further evaluated re-ranker models in a setting where the top 100 search results are retrieved by BM25 are presented as an input to the model. The model output is the re-ranked order of documents corresponding to the query. We trained HerBERT-base and HerBERTlarge re-rankers on the BEIR-PL MS MARCO dataset.
+Key words: “re-ranker, models, BM25, query, HerBERT-base, HerBERTlarge, BEIR-PL MS MARCO, dataset, results, retrieved”
+
+
+Section name: 3.2.3 Polish T5 based re-ranker models
+Paragraph: Furthermore, we trained and evaluated sequence-to-sequence MonoT5 re-rankers based on plT5 language models [6], in both base and large variants. We used special tokens _prawda (‘true’) and _fałsz (‘false’), to represent positive and negative relevance between query and passage. This architecture is composed of encoder and decoder, which may lead to different performance compared to HerBERT, which is a BERT-based model [8]. 
+Key words: “Polish, T5, re-ranker, models, sequence-to-sequence MonoT5, plT5, language, variants, tokens, _prawda (‘true’),  _fałsz (‘false’), positive, negative, query, passage, architecture, encoder, decoder, performance, HerBERT, BERT-based model”
+
+
+Section name: 3.3 Late interaction HerBERT based re-ranker model
+Paragraph: Finally, we trained and evaluated late-interaction model named ColBERT [17], with HerBERT base as its core language model. The maximum document length was set to 180 tokens in our configuration. Creating an index for the retrieval task using ColBERT requires large disk and memory space – the model stores in memory the tokens obtained from corpus encoding (the index size of MSMARCOPL is estimated to be at least 200GB). Due to that reason, we decided to use ColBERT as a re-ranker, which does not require creating enormous indexes.
+Key words: “interaction, HerBERT, re-ranker, model, late-interaction, ColBERT, language, document length, tokens, index, retrieval task, large disk, memory space, corpus encoding, MSMARCOPL, indexes”
+
+
+Section name: 3.4 Experimental setup
+Paragraph: Our models (all except ColBERT) were trained on two NVIDIA– RTX3090 GPUs with 24GB of memory each. The unsupervised HerBERT-base ICT bi-encoder was trained for 203 hours with batch size 64 for about 1.8M iterations. The learning rate hyperparameter was set to 2e −4 . For fine-tuned variants of HerBERT-based rerankers, we trained the models for ≈25 hours with a batch size of 32. The HerBERT-base model was trained on 20M examples, and the HerBERT-large model on 3.2M. Both T5-based models were trained for 20 hours with gradient accumulation steps set to 16 and batch size 16. The T5-base model was trained on 5M examples, and the T5-large model on 645K examples. 
+Key words: “ColBERT, NVIDIA– RTX3090, GPU, unsupervised HerBERT, reranker, models,  ICT, bi-encoder, batch size, iterations, learning rate, hyperparameter variants, 
+ HerBERT-base model, HerBERT-large model, T5-based model, gradient, accumulation steps, T5-large model”
+
+
+Section name: 4 Results and Discussion
+Paragraph: BM25 – lexical level retrieval algorithm – performs better for the English language than for Polish, as showed in Table 1. Moreover, it demonstrates the lowest score for Polish when compared with the multilingual MS Marco dataset results among all different languages, as shown in Figure 2. The main cause of such a low performance scores for Polish language is that Polish is a highly inflected language with large number of word forms per lexeme (also Proper Names are inflected) and a complex morphological structure. In such a case, lexical matching is less effective than in the case of other languages. Furthermore, the Elasticsearch engine does not support algorithmic stemming for Polish language in version 8.7 or lower.
+Key words: “BM25, lexical, algorithm, English language, Polish, multilingual MS Marco, dataset, performance score, lexeme,  Proper Names, inflected, complex morphological structure, lexical matching, Elasticsearch, engine, algorithmic stemming”
+
+
+Section name: 5 Conclusions
+Paragraph: Information Retrieval in the Polish language is still developing and is an intensive research area. Therefore, there is a great need for resources to enable further training and more accurate evaluation of existing and new deep neural IR models. In this work, we introduced the translated BEIR-pl benchmark and showed the results of a broad family of IR baseline models. We would like to encourage other researchers to participate in further development of Polish and multilingual IR models using our new resource. Our findings revealed that IR models perform differently depending on the dataset’s characteristics. In some cases, lexical similarity is the right choice to solve the task, and in other cases, it is beneficial to rely on transformer reranker models. 
+Key words:  “Information Retrieval, Polish, language, intensive, research, resources, accurate, evaluation, deep neural IR model, BEIR-pl, benchmark, IR baseline model, multilingual IR models, dataset, characteristics, lexical, similarity, reranker, model”
+ 
+
+
+
+
+5. Document name:Deliberate then Generate: Enhanced Prompting Framework for Text Generation 
+Section name: Introduction
+Paragraph: Large language models (LLMs) [4, 28, 41] are revolutionizing the area of natural language generation, which have demonstrated exceptional abilities in generating coherent and fluent text as well as exhibited a remarkable aptitude in performing a diverse range of text generation tasks with high accuracy [13, 26]. When adapting to downstream tasks, traditional fine-tuning methods require access to the parameters of LLMs, which hinder their application on powerful black-box LLMs (e.g., ChatGPT) that only provide APIs to interact with. Therefore, prompting methods that guide the generation results by providing several task-specific instructions and demonstrations have attracted lots of attention in recent works [37, 36], which show that the prompt can significantly influence the resulting outcomes and thus require careful design. 
+Key words: “Large language models (LLMs), natural language generation, coherent, diverse, text generation, accuracy, downstream tasks, fine-tuning, parameters, black-box, ChatGPT, APIs, task-specific instructions”
+
+
+Section name: 2 Related Work
+Paragraph: Large Language Models. With the scaling of model and corpus sizes, Large Language Models (LLMs) [7, 32, 18] have achieved remarkable success in various areas of natural language processing. Considering the large scale of the LLMs, exploring cost-effective fine-tuning methods is one appealing line of work when adapting to downstream tasks [14, 20]. The fine-tuning approach poses a challenge when applied to powerful black-box LLMs that only offer APIs for interaction, as it requires access to the underlying parameters. With the help of instruction tuning [44] and reinforcement learning from human feedback [29], recent LLMs can achieve gradient-free adaptation
+Key words: “Large Language Models, model, corpus, natural language processing, cost-effective, fine-tuning, downstream, black-box, APIs, parameters, tuning, reinforcement, feedback, gradient-free, adaptation”
+
+
+
+
+Section name: 3 Deliberate then Generate
+Paragraph: Language acquisition by a human is normally based on both positive and negative feedback and improves the ability of language use through corrections. Inspired by this, unlike the conventional prompts only with correct information, we introduce a more deliberate approach termed Deliberate then Generate (DTG) prompting by facilitating LLMs to detect errors on a synthesized text that may contain errors. Specifically, the proposed DTG method unfolds in the following manner: 1) It begins by a concise and explicit instruction of the desired task, providing guidance on generating an intended text based on a given input text; 2) A synthesized text is then provided as a candidate output; (3) Finally, DTG encourages the model to detect potential errors, and subsequently generate an improved output after thorough deliberation. 
+Key words: “positive and negative feedback, conventional prompts, Deliberate then Generate (DTG), LLMs  errors, synthesized text, explicit instruction, detect, potential, output”
+
+
+Section name: 4 Datasets and Evaluation
+Paragraph: In experiments, we are devoted to evaluating the generation ability of LLMs and the proposed DTG prompting. We select 7 representative generation tasks, including machine translation, abstractive summarization, dialogue summarization, text simplification, style transfer, paraphrase and commonsense generation. 
+Key words: “Dataset, evaluation, LLMs, DTG, generation tasks, machine translation, abstractive summarization, dialogue summarization, text simplification, style transfer, paraphrase, commonsense generation”
+
+
+Section name: 5 Experiments
+Paragraph: In this section, we assess the efficacy of the text-davinci-003 (also known as GPT3.5, which is denoted as GPT in the following for simplicity) across 7 sequence generation tasks, including machine translation, abstractive summarization, dialogue summarization, text simplification, style transfer, commonsense generation and paraphrase. The chosen baseline comparisons consist of 1-shot, and few-shot (mostly 5-shot) learning scenarios. It is worth mentioning that while the performance of GPT models on machine translation has been extensively investigated in previous research, other generation tasks (e.g., text simplification and style transfer) have received comparatively limited attention. To demonstrate the versatility of DTG method and address the primary limitation of GPT3.5, we conduct further experiments with GPT4, a cutting-edge LLM API. 
+Key words: “efficacy, text-davinci-003, GPT3.5, GPT, generation tasks, machine translation, abstractive summarization, dialogue summarization, text simplification, style transfer, commonsense generation, paraphrase, baseline, versatility of DTG, cutting-edge LLM API”
+
+
+Section name: 5.1 Results on Machine Translation
+Paragraph: We compare the performance of GPT standard prompting and our deliberate then generate method (DTG) with that of a commercial system (Microsoft Translator) in addition to WMT SoTA systems. Table 1 presents the results in both 1-shot and 5-shot scenarios. Without meticulous parameter tuning, we set the temperature to 0 and top_p to 1 when calling the API. The findings here indicate that our re-implementation aligns with the trends observed in previous study [13], that 5-shot beats 1- shot in most language pairs. Benefiting from the deliberation, DTG effectively pushes the boundaries and leads to enhanced results across all to-English language pairs in both 1-shot and 5-shot settings based on GPT3.5 model. For instance, DTG method exhibits substantial BLEU score increases in DE-EN, ZH-EN, and UK-EN language pairs in 5 shot scenarios.
+Key words: “Machine translation, deliberate then generate method (DTG), Microsoft Translator, WMT SoTA systems, 1-shot and 5-shot scenarios, parameter tuning, API, substantial BLEU, DE-EN, ZH-EN, and UK-EN language pairs”
+
+
+Section name:  5.2 Results on Summarization
+Paragraph: For abstractive summarization, we mainly evaluate GPT models on CNN/DailyMail and GigaWord, two of the most widely-used summarization tasks. Due to the limit of max length for GPT models (4097) and the long input length of CNN/DailyMail, we only evaluate the performance in 1-shot scenario. As shown in Table 2, GPT models show comparative performance with Transformer which is specially tuned on the downstream training set. Our DTG can also shown further improvement in terms of three Rouge metrics, which demonstrate the effectiveness of DTG on long-term modeling task. However, DTG still falls lag behind of large-scale pretrained models, such as BART [19] and UniLMv2 [3] in automatic evaluations. We will add more human alignment judgment in Section 6.
+Key words: “evaluate, GPT models, CNN/DailyMail, GigaWord, summarization tasks, performance, 1-shot scenario, Transformer, downstream, training set, Rouge metrics, DTG, long-term modeling task, pretrained models, BART, UniLMv2, alignment judgement”
+
+
+Section name: 5.3 Results on Style Transfer
+Paragraph: Table 4 displays performance across style transfer tasks from the GYAFC dataset: Entertainment Music (EM) and Family Relationships (FR), both involving informal to formal transformations. Evidently, the Deliberate then Generate (DTG) method prompts the GPT model to correct inaccuracies and generate more precise informal sentences. Specifically, DTG achieves an 8-point and 10.04- point increase in BLEU score for EM and FR tasks, respectively, compared to standard prompting. Although DTG trails BART [19] in BLEU scores, it surpasses BART in BLEURT scores, registering gains of 0.98 and 0.32 for EM and FR tasks, respectively. These results highlight the potential of LLMs and our DTG method in style transfer tasks.
+Key words: “performance, style transfer, GYAFC, dataset, Entertainment Music (EM), Family Relationships (FR), informal to formal transformations, Deliberate then Generate (DTG), GPT, BLEU score, DTG trails BART, BLEURT scores, LLMs”
+
+
+Section name: 5.4 Results on Text Simplification
+Paragraph: Experiments were conducted on two text simplification benchmarks, Asset and Wiki-Auto, where the primary goal of which is to create a simplified rendition of the given text input. The main evaluation metric is the SARI score. Our findings illustrate that GPT models demonstrate robust performance across both simplification benchmarks, even surpassing the existing state-ofthe-art models (MUSS) built based on BART. Furthermore, the incorporation of DTG method significantly enhances GPT model performance, leading to improvements in both BLEU and SARI scores. Specifically, DTG establishes a new benchmark for state-of-the-art results on these two simplification tasks.
+Key words: “text simplification, benchmarks, Asset, Wiki-Auto, rendition,text input, evaluation metric, SARI score, GPT models, state-ofthe-art models (MUSS), BART, DTG, model, BELU”
+
+
+Section name: 6 Analysis
+Paragraph: In this section, we delve into a series of intriguing questions to elucidate the circumstances and reasons underpinning the robust performance of DTG. Unless specified otherwise, the base engine utilized throughout this investigation is text-davinci-003. 
+Key words:  “intriguing questions, elucidate, robust performance, DTG, base engine, investigation, text-davinci-003”
+
+
+Section name: 7 Conclusions
+Paragraph: In this paper, we propose DTG prompting, which encourages LLMs to deliberate before generating the final results by letting the model detect the error type on a synthetic text that may contain errors. Using an empty string as the synthetic text successfully gets rid of an extra baseline system and improves the quality of the generated text. The DTG prompting can be easily applied to various text generation tasks with minimal adjustments in the prompt. Extensive experiments conducted on over 20 datasets across 7 text generation tasks demonstrate the effectiveness and broad applicability of the DTG prompting framework. One potential avenue for further enhancing the efficacy of DTG prompting involves leveraging task-specific domain knowledge. (e.g., explicitly listing the potential error types in the prompts to provide guidance for deliberation), which is worth future investigation.
+Key words: “DTG, LLMs, model, error type, synthetic text, baseline system, text generation, dataset, framework, potential, avenue, efficacy, task-specific, potential, guidance, deliberation, investigation”
+ 
+6. Document Name: Direct Diffusion Bridge using Data Consistency for Inverse Problems 
+Section name: Introduction
+Paragraph:  Diffusion models [15, 38] have become the de facto standard of recent vision foundation models [32, 31, 33]. Among their capabilities is the use of diffusion models as generative priors that can serve as plug-and-play building blocks for solving inverse problems in imaging [18, 38, 21, 5]. Diffusion model-based inverse problem solvers (DIS) have shown remarkable performance and versatility, as one can leverage the powerful generative prior regardless of the given problem at hand, scaling to linear [18, 38, 21], non-linear [5, 36], and noisy problems [21, 5]. 
+Key words: “Diffusion models, de facto, vision foundation models, diffusion model, generative, inverse problems, Diffusion model-based inverse problem solvers (DIS), versatility, linear, non-linear, and noisy problems”
+
+
+Section name: 2 Background (2.1 Diffusion models)
+Paragraph: Diffusion models [15, 38, 22, 19] defines the forward data noising process p(xt|x0) as xt = αtx0 + σtz, z ∼ N (0, I) for t ∈ [0, 1], (1) where αt, σt controls the signal component and the noise component, respectively, and are usually designed such that α 2 t + σ 2 t = 1 [15, 22]. Starting from the data distribution pdata := p(x0), the noising process in (1) gradually maps p(xt) towards isotropic Gaussian distribution as t → 1, i.e. p(x1) ≃ N (0, I). Training a neural network to reverse the process amounts to training a residual denoiser min θ Ext∼p(xt|x0),x0∼pdata(x0),ϵ∼N(0,I) h ∥ϵ (t) θ (xt) − ϵ∥ 2 2 i ,
+Key words: “Diffusion models, noising process, signal component, noise component, data distribution, neural network, training a residual denoiser” 
+
+
+Section name: 2.2 Diffusion model-based inverse problem solving with gradient guidance
+Paragraph: Suppose now that we are given a measurement y obtained through some Gaussian linear measurement process A, where our goal is to sample from the posterior distribution p(x|y). Starting from the sampling process of running the reverse SDE/ODE to sample from the prior distribution, one can modify the score function to adapt it for posterior sampling [38, 5]. By Bayes rule, ∇xt log p(xt|y) = ∇xt log p(xt) + ∇xt log p(y|xt), where ∇xt log p(xt) ≃ sθ ∗ (xt). However, ∇xt log p(y|xt) is intractable. Several methods have been proposed to approximate this time-dependent likelihood, two of the most widely used being DPS [5] and ΠGDM [36]. DPS proposes the following Jensen approximation1 ∇xt log p(y|xt) (DPS) ≃ ∇xt log p(y|xˆ0|t) = ∂xˆ0|t ∂xt ∂∥Axˆ0|t − y∥ 2 2 ∂xˆ0|t = ∂xˆ0|t ∂xt | {z } J A ⊤(y − Axˆ0|t) | {z } V , (5) of which the chain rule is based on the denominator layout notation [41].
+Key words: “measurement, Gaussian linear, posterior distribution p(x|y), reverse SDE/ODE, distribution, posterior sampling, Bayes rule, time-dependent likelihood, DPS and ΠGDM, Jensen approximation1, chain rule, notation”
+
+
+Section name: 3 Main Contributions ( 3.1 Direct Diffusion Bridge)
+Paragraph: We consider the case where we can sample x0 := x ∼ p(x), and x1 := y ∼ p(y|x) 2 , i.e. paired data for training. Adopting the formulation of I2SB [26] we define the posterior of xt to be the product of Gaussians N (xt; x0, γ2 t ) and N (xt; x1, γ¯ 2 t ), such that p(xt|x0, x1) = N  xt; γ¯ 2 t γ 2 t + ¯γ 2 t x0 + γ 2 t γ 2 t + ¯γ 2 t x1, γ 2 t γ¯ 2 t γ 2 t + ¯γ 2 t I  . (7) Note that the sampling of xt from (7) can be done by the reparametrization trick xt = (1 − αt)x0 + αtx1 + σtz, z ∼ N (0, I), (8) where αt := γ 2 t γ 2 t +¯γ 2 t , σ2 t := γ 2 t γ¯ 2 t γ 2 t +¯γ 2 t 3 . This diffusion bridge introduces a continual degradation process by taking a convex combination of (x0, x1), starting from the clean image at t = 0 to maximal degradation at t = 1, with additional stochasticity induced by the noise component σt. Our goal is to train a time-dependent neural network that maps any xt to x0 that recovers the clean image. 
+Key words: “data, training, posterior, Gaussians, sampling, reparametrization trick, diffusion bridge, continual degradation process, convex combination, maximal degradation, noise component, time-dependent, neural network, clean image”
+
+
+Section name: 3.2 Data Consistent Direct Diffusion Bridge
+Paragraph: Motivation Regardless of the choice in constructing DDB, there is a crucial component that is missing from the framework. While the sampling process (10) starts directly from the measurement (or equivalent), as the predictions xˆ0|t = Gθ(xt) are imperfect and are never guaranteed to preserve the measurement condition y = Ax, the trajectory can easily deviate from the desired path, while the residual blows up. Consequently, this may result in inferior sample quality, especially in terms of distortion. In order to mitigate this downside, our strategy is to keep the DDB sampling strategy (10) intact and augment the steps to constantly guide the trajectory to satisfy the data consistency, similar in spirit to gradient guidance in DIS. Here, we focus on the fact that the clean image estimates xˆ0|t is produced at every iteration, which can be used to compute the residual with respect to the measurement y. Taking a gradient step that minimizes this residual after every sampling step results in Algorithm 1, which we dub Consistent DDB (CDDB). In the following, we elaborate on how the proposed method generalizes DDS which was developed for DIS.
+Key words: “DDB, framework, sampling process, predictions, trajectory, residual, inferior sample quality, distortion, sampling strategy, augment, data consistency, gradient, DIS, Algorithm, dub Consistent DDB (CDDB), DDS”
+
+
+Section name: 4 Experiments (4.1 Setup)
+Paragraph: Model, Dataset For a representative DDB, we choose I2SB [26] along with the pre-trained model weights for the following reasons: 1) it is open-sourced4 , 2) it stands as the current state-of-the-art, 3) the model architecture is based on ADM [11], which induces fair comparison against other DIS methods. All experiments are based on ImageNet 256×256 [10], a benchmark that is considered to be much more challenging for inverse problem solving based on generative models [5], compared to more focused datasets such as FFHQ [20]. We follow the standards of [26] and test our method on the following degradations: sr4x-{bicubic, pool}, deblur-{uniform, gauss}, and JPEG restoration with 1k validation images.
+Key words: “Dataset, DDB, pre-trained, model, opensourced, current state-of-the-art, architecture, ADM, DIS, ImageNet 256×256, inverse problem solving, generative models, FFHQ, degradations, sr4x-{bicubic, pool}, deblur-{uniform, gauss}, JPEG restoration, validation images”
+
+
+Section name: 4.2 Results
+Paragraph: Comparison against baselines Throughout the experiments, we thoroughly analyze both distortion and perception of the reconstructions obtained through our method against other DDB, DIS, and iterative optimization methods. Note that for the recent diffusion-based methods, analysis has been mainly focused on perceptual metrics [5, 36, 26], mainly because these methods excel on these metrics, but often compromising distortion metrics. 
+Key words: “baselines, experiments, analyze, distortion, perception, reconstructions, DDB, DIS, iterative, optimization methods, diffusion-based methods, analysis, perceptual metrics, metrics, distortion metrics”
+
+
+Section name: 5 Discussion
+Paragraph: Extension to other related works Going beyond the paired inverse problem setting and considering the Schrödinger Bridge (SB) problem [25, 8], or more generally transport mapping problems [27] between the two unmatched distributions, it is often desirable to control the deviation from the start of sampling. A concrete example would be the case of image-to-image translation [43] where one does not want to alter the content of the image. As CDDB can be thought of as a regularization method that penalizes the deviation from the starting point, the application is general and can be extended to such SB problems at inference time by using the gradients that minimize the distance from the start point. We leave this direction for future work.
+Key words: “paired inverse problem, Schrödinger Bridge (SB) problem, transport mapping problems, distributions, deviation, sampling, image-to-image translation, CDDB, regularization method, inference time, gradients ”
+
+
+Section name:  6 Conclusion
+Paragraph: In this work, we unify the seemingly different algorithms under the class of direct diffusion bridges (DDB) and identify the crucial missing part of the current methods: data consistency. Our train-free modified inference procedure named consistent DDB (CDDB) fixes this problem by incorporating consistency-imposing gradient steps in between the reverse diffusion steps, analogous to the recent DIS methods. We show that CDDB can be seen as a generalization of representative DIS methods (DDS, DPS) in the DDB framework. We validate the superiority of our method with extensive experiments on diverse inverse problems, achieving state-of-the-art sample quality in both distortion and perception. Consequently, we show that CDDB can push the Pareto-frontier of the reconstruction toward the desired optimum. 
+Key words: “algorithms, direct diffusion bridges (DDB), data consistency, train-free, consistent DDB (CDDB), consistency-imposing gradient, reverse diffusion, DIS, DDS, DPS, framework, validate, diverse inverse problems, state-of-the-art sample quality, distortion, perception , Pareto-frontier, optimum”
+
+
+
+
+7. Document Name: PREDICTING PROTEIN STABILITY CHANGES UNDER MULTIPLE AMINO ACID SUBSTITUTIONS USING EQUIVARIANT GRAPH NEURAL NETWORKS
+Section name: INTRODUCTION
+Paragraph: Protein stability is a crucial component of protein evolution (Godoy-Ruiz et al., 2004), it lies at the root of our understanding of many human diseases (Peng & Alexov, 2016) and plays a major role in protein design and engineering (Qing et al., 2022). Protein stability is typically represented as the change in free energy, ∆G, between the unfolded and folded states (Matthews, 1993) and is a global feature of a protein. A negative ∆G of folding indicates an energetically favourable protein conformation; the greater the magnitude of a negative ∆G, the more stable the conformation. Mutations can alter the favourability of a protein fold, with even single amino acid substitution events potentially disturbing the native conformation of a protein (Stefl et al., 2013). For example, a substitution from threonine to methionine in 12/15-Lipoxygenase is a cited potential cause of hereditary cardiovascular diseases (Schurmann et al., 2011); the mutation disrupts a chain of stabilising hydrogen bridges, causing structural instability and reducing catalytic activity.
+Key words: “Protein stability, component of protein, Godoy-Ruiz, human diseases, Peng & Alexov protein design and engineering, Qing, energy, unfolded and folded states,  favourable protein conformation, Mutations, protein fold, amino acid substitution, native conformation of a protein, substitution, threonine, methionine, 12/15-Lipoxygenase, hereditary cardiovascular diseases, hydrogen bridges, catalytic activity”
+ 
+Section name: 2 RELATED WORK
+Paragraph: In moving away from established molecular modelling approaches, machine learning methods EASE-MM (Folkman et al., 2016) and SAAFEC-SEQ (Li et al., 2021) leverage 1D sequences and protein evolutionary information to predict ∆∆G with decision trees and Support Vector Machines, respectively. While ACDC-NN-Seq (Pancotti et al., 2021) explored utilising DL by applying Convolutional neural networks (CNNs) to protein sequences. As sequence data is more widely available than experimental structures, it is probable that the insight of these models into 3D structural characteristics, such as free energy of folding, is limited by their 1D representation. PON-tstab (Yang et al., 2018) implemented a combination of sequence and structure-based features in tabular format with random forests. DeepDDG (Cao et al., 2019) relies on tabular empirical features obtained from structure, such as solvent-accessible surface area, to predict stability with neural networks. 
+Key words: “molecular modelling approaches, machine learning methods, EASE-MM, SAAFEC-SEQ, Support Vector Machines, decision trees, ACDC-NN-Seq, Convolutional neural networks, protein sequences, sequence data,  PON-tstab, random forests, DeepDDG, solvent-accessible surface area, neural networks”
+ 
+Section name: 3 METHOD (3.1 ATOMIC ENVIRONMENT (AE) EMBEDDER)
+Paragraph: We followed the RASP protocol to design and train our AE embedder in a self-supervised masked amino acid manner, with two key differences: 1. We used an EGNN (Figure 2) with its own set of graph features describing the AE (Figure 1) instead of a CNN. 2. We used a macro averaged F1 score as our metric on the validation set to select model parameters from the highest-performing epoch. The training and the validation sets are from the same data-set described in RASP (Blaabjerg et al., 2022). Our EGNN was built with layers described in Garcia Satorras et al. (2021), with an average message aggregation strategy (Equation 1). Recalling from Garcia Satorras et al.
+Key words: “RASP protocol, AE embedder, self-supervised masked amino acid manner, EGNN , AE, CNN, F1 score, metric, parameters, epoch, dataset,  Garcia Satorras, aggregation strategy”
+ 
+Section name: 3.2 MUTANT STABILITY SCORING
+Paragraph: We used the same model architecture as presented for the AE embedding (Figure 2), for the regression task of predicting ∆∆G. The set of hyper-parameters differs as described in the Appendix (Table 7). For this task, the graph is built at the residue-level with additional atomic-level features to 4 bridge the gap between the two fundamental scales. Indeed, in this representation nodes are residues represented in terms of their spatial positioning by the residue mean atomic position coordinates. Nodes are featurised with the vector output of the previously trained AE embedder. More node features are included with an 11-dimensional representation of the physico-chemical properties of the WT amino acid (Kawashima et al., 2007; Xu et al., 2020), concatenated to the same representation, except for the mutated amino acid nodes.
+Key words: “architecture, AE embedding, regression task, predicting, hyper-parameters, Appendix, residue-level, atomic-level, residues, spatial, residue mean atomic position coordinates, trained AE embedder, 11-dimensional, physico-chemical properties, WT amino acid, mutated amino acid nodes”
+ 
+Section name: 4 RESULTS (4.1 ATOMIC ENVIRONMENT EMBEDDER)
+Paragraph: With our AE implementation, we reached a macro averaged F1 score of 0.63 on the training set and of 0.61 (accuracy = 0.65) on the validation set, which is comparable to the RASP 0.63 accuracy also on a similar but different validation set (we shuffled the structures), full results in Appendix Table 4. The confusion matrix on the validation set (Figure 9) is also provided in the Appendix and shows a variable but strong ability of the model to match ground truth. 
+Key words: “AE, averaged F1 score, training set, accuracy, validation set, RASP, Appendix, confusion matrix, model, ground truth”
+ 
+Section name: 4.2 MUTANT STABILITY SCORER
+Paragraph: Evaluation metrics for the different splits are available in Figure 10, as well as a description of the Mega-scale data-set in the Appendix: A. Given the unique qualities of the Mega-scale data-set, we decided to evaluate the model in what we believe is a more stringent way than simply looking at the Mega-Scale test split (metrics are provided for the split too). Indeed, the Mega-scale dataset only contains domains and not full proteins, and structures were resolved computationally using AlphaFold (Jumper et al., 2021). The Mega-scale data-set also only contains up to double mutations. Hence, we decided to evaluate our model on a more standard data-set with experimentally resolved entire protein structures: ThermoMutDB (Xavier et al., 2021) (a description of the ThermoMutDB data-set is also provided in the Appendix: A.3).
+Key words: “Evaluation, metrics, splits, dataset, Appendix, model, proteins, AlphaFold, mutations, protein structures, ThermoMutDB, ThermoMutDB dataset”
+ 
+Section name: 5 DISCUSSION
+Paragraph: These preliminary results show that the combination of decoupling of the atomic and residue scales, with the usage of an EGNN architecture, to allow flexibility on the number of mutations accessible to score, is promising. In realising this exploratory work we faced two main challenges: 1. The scorer had a tendency to over-fit the Mega-scale data-set. 2. The current choice of a threshold for the residue graph is constrained. We ended up choosing 9A, where depending on the residues, a typical length for such interactions could go ˚ to 16A or more (for two tryptophans, given the max distance between their own atoms). ˚ But such a threshold would lead to a hyper-connected graph that would hinder the training. Generally speaking the graph building hyper-parameters, for example, the number of hops around the recovered nodes of interest (here one: neighbours one hop from the mutant nodes), would influence hyper-connectivity and our ability to not over-fit.
+Key words: “preliminary, results, decoupling, atomic and residue scales, EGNN architecture, architecture, flexibility, mutations, score, tendency, overfit, threshold, residue graph, constrained, 9A, 16A, tryptophans, atoms, hyper-connected graph, hyper-parameters, hops , mutant nodes, hyper-connectivity”
+ 
+Section name: 6 CONCLUSION
+Paragraph: In this work, we explored the possibility of using graph neural network models for scoring multiple substitution effects on protein stability. Our approach, based on the decoupling of atomic and residue scales by successively training two different scale-specific E-GNN models on massive experimental data-sets, shows promising results. Indeed, the model demonstrates an ability to predict effects of a variable number of mutations, even beyond what it has been trained on. Yet some key parameters of this modelling still need to be better understood; for example, a biologically reasonable edge distance threshold and an overall more appropriate way to handle connectivity in the created residue sub-graph. 
+Key words: “possibility, graph neural network models, substitution, protein stability, decoupling, atomic, residue scales, training, E-GNN models, dataset, predict, mutations, parameters, modelling, edge distance, threshold, connectivity, residue, sub-graph ”
+
+
+
+
+
+8.               Document name: Primal-Attention: Self-attention through Asymmetric Kernel SVD in Primal Representation 
+Section name: Introduction 
+Paragraph: Transformers [1] have become ubiquitous nowadays with state-of-the-art results in various tasks, such as natural language processing [2–4], computer vision [5–8], reinforcement learning [9–11], etc. In the remarkable success of Transformers, the self-attention blocks play a key role, where the complicated dependencies between the individuals in data sequences can be depicted by using the Figure 1: Spectrum analysis of the self-attention matrix on ImageNet-1K [23]. (a)-(c) plot the cumulative explained variance regarding the singular values of the attention matrix with mean and standard deviation of the chosen layers in pre-trained DeiT-Small/16 [7] and Primal.+DeiT-Small/16 (ours): the attention matrix attains sharper singular value decays in deeper layers, also shown in (d). Note that we also plot the cumulative explained variance curves of the self-attention matrix from the last layer, i.e., the 11-th layer denoted by “L[11]”, of both models in (c). Our method shows an enhanced low-rank property of the attention matrix upon the baseline.
+Key words: “ Transformers, ubiquitous, natural language processing, computer vision, reinforcement learning, success of Transformers, key role, complicated dependencies, data sequences, Spectrum analysis, matrix, singular values, standard deviation, pre-trained, self-attention matrix,  enhanced low-rank property”
+ 
+Section name: 2 Problem Statement: Self-attention with Asymmetric Kernel 
+Paragraph: Self-attention Let {xi ∈ R d} N i=1 be the input data sequence. In self-attention [1], the queries, keys and values output the linear projections of the input sequence, such that q(xi) = Wqxi , k(xi) = Wkxi , v(xi) = Wvxi , (1) where Wq ∈ R dq×d , Wk ∈ R dk×d , and Wv ∈ R dv×d , commonly with the setup dq = dk. The attention scores are then given by a(xi , xj ) = ⟨q(xi), k(xj )⟩/ √ dk = ⟨Wqxi , Wkxj ⟩ / √ dk. In the canonical self-attention, the “softmax” activation is then applied to bring non-linearity and positives, yielding the attention weights: κ(xi , xj ) = softmax  ⟨Wqxi , Wkxj ⟩ / p dk  , i, j = 1, . . . , N. (2) Similar to [12], the attention matrix, i.e., K := [κ(xi , xj )] ∈ R N×N , can be interpreted as a kernel matrix with entries κ(xi , xj ), where κ(·, ·): R d × R d 7→ R serves as the kernel function. Notice that in general ⟨Wqxi , Wkxj ⟩ ̸= ⟨Wqxj , Wkxi⟩, leading to an asymmetric kernel where Kij ̸= Kji. Then, the attention output oi ∈ R dv in each head is attained as: oi = XN j=1 v(xj )κ(xi , xj ) = XN j=1 v(xj )Kij , i = 1, . . . , N. (3) In Transformers, multiple heads are commonly applied through the concatenation of all heads [1].
+Key words: “Self-attention, input data sequence, queries, keys, values, linear projections, input sequence, attention scores, canonical self-attention, softmax, activation, non-linearity, attention weights, attention matrix, kernel matrix, kernel function, asymmetric kernel, transformers, heads”
+ 
+Section name: 3 Primal-dual Representation of Self-attention based on Kernel SVD
+Paragraph: In this section, we apply the kernel trick from RKBS to the asymmetric attention kernel, and derive self-attention with a primal-dual representation based on Kernel SVD (KSVD). Under this learning scheme, a novel self-attention mechanism is proposed by remodeling the attention output in the primal representation, without explicit computation of the kernel matrix in the dual representation. With the stationarity conditions, we flexibly implement the optimization of KSVD through an additional loss term, which can regularize the model to improved low-rank properties without extra decomposition.
+Key words: “kernel, RKBS, asymmetric kernel SVD (KSVD), self-attention, remodelling, kernel matrix, dual representation, stationarity condition, optimization, loss term, regularize, low-rank properties, decomposition”
+ 
+Section name: 4 Primal-Attention
+Paragraph: Modeling It is quite remarkable that the attention output can be equivalently represented without the kernel expressions, avoiding the heavy computation of the kernel matrix. Within the context of KSVD, we further observe that there exists another set of projections rj regarding the left singular vectors in hei as in (8), providing extra information residing in the asymmetric kernel matrix K. We derive a novel attention mechanism by leveraging the primal representation of KSVD, namely, Primal-Attention, where two explicit feature maps ϕq, ϕk are adopted.
+Key words:
+ 
+Section name:  5 Numerical Experimen
+Paragraph:  In this section, we verify the effectiveness of our Primal-Attention applied in Transformers on four well-established benchmarks: time series, long sequence modeling, reinforcement learning, and computer vision. Notably, we consider two types of Transformers applied with our Primal-Attention, i.e., PrimalFormer (Primal.) and Primal.+. i) In PrimalFormer, Primal-Attention (9) is applied to all attention layers, regularized with the KSVD loss (11). This setup is preferred when data shows relatively strong low-rank structure or the model redundancy is quite substantial. ii) Primal.+ refers to the baselines from the Transformer family with the last layer replaced by our Primal-Attentio
+Key words:  
+ 
+Section name: 6 Related work 
+Paragraph: Since the pioneering work [12], the kernel-based approaches have become popular in Transformers, in which the kernel interpretation on the attention matrix has been shed light on. FourierFormer [17] treats the canonical self-attention as non-parametric regression with methodologies for symmetric kernels. [18] considers relative positional embedding with conditional positive definite kernel. [19] treats self-attention operation as support vector regression without considering the asymmetry in the deployed kernel methods, and the supervised regression is not applied in optimzing the attention either. [48] addresses the issue of asymmetry, however, it resorts to symmetrization by replacing the softmax attention with an approximated symmetric one, thereby still dismissing the asymmetry. These prior works deploy kernel-based techniques that are originally designed for symmetric kernels and request to suffice Mercer conditions, which is inconsistent with the asymmetric nature in self-attention, resulting in a nontrivial gap between the analytical understanding and numerical implementation towards revealing the rationale in Transformers.
+Key words:
+
+
+
+
+9.               Documnet name: DeepMerge: Deep Learning-Based Region-Merging for Image Segmentation
+Section name: Introduction 
+Paragraph: Acquiring very high-spatial-resolution (VHR) remote sensing images over large areas has become easier than ever due to the advancement in satellite remote sensing sensors. VHR images provide rich spatial details for characterizing objects on the ground. For this reason, they have been widely applied in land-cover and land-use classification [1], urban functional zone understanding [2], urban management [3], building roof modelling [4], largescale terrain classification [5], and object extraction and monitoring [6, 7]. Objects in the land-cover classes tend to show high intra-class discrepancy and inter-class consistency, leading to challenges in image interpretation. Geographic Object-based Image Analysis (GeOBIA) has been proven to be a useful approach to address this issue by transitioning image interpretation from pixel-level to object-level and by partitioning an entire satellite image into meaningful geo-objects [8].
+Key words:
+ 
+Section name: 2. Related works
+Paragraph: Image segmentation is an essential step in remote sensing image analysis workflows; its goal is to cluster adjacent similar pixels into meaningful geo-objects. A great number of efforts have been made to improve the segmentation quality of remote sensing images, such as the development of simple linear iterative clustering [13], superpixels extracted via energy-driven sampling [14], mean-shift [15], multi-resolution segmentation [16]. Contourbased methods are an important branch of segmentation methods focusing on the extraction of object boundaries [17, 18, 19].
+Key words:
+ 
+Section name: 2.1. Scale parameter optimization in image segmentation
+Paragraph: Efforts have been made to optimize scale parameters in region-merging methods. The segmentation output varies by setting different global scales in the investigated area. Low scale results in small-area segments, benefiting the segmentation of small geo-objects; however, large objects tend to contain multiple regions, leading to over-segmentation errors. The manual-optimal scale is often determined by a trial-and-error process, causing uncertainties in segmentation results [1, 20]. Therefore, scholars developed automatic and self-adaptive scale optimization methods. The majority of region-merging algorithms calculate the homogeneity in geo-objects and the heterogeneity between geo-objects to determine the optimal scale for geo-objects.
+Key words:
+ 
+Section name: 2.2. Merging criteria
+Paragraph: Merging criteria have been regarded as another important component that determines the segmentation results. To enhance the quality of segmentation, a supervised classic watershed segmentation method was improved via multispectral gradient in [27]. Furthermore, [28] utilized a graphcutting heuristic method to accelerate the Minimum Spanning Tree-based algorithm. [29] developed an unsupervised image segmentation and evaluation and refinement using weighted variance and Moran’s I in a series of scales.
+Key words:
+ 
+Section name: 2.3. Rationale of Vision Transformers
+Paragraph: The vision Transformer is a deep learning model able to capture longrange pixel dependencies based on the self-attention mechanism [35]. Inspired by human visual concertation, the self-attention mechanism focusses the attention on important information, thereby saving resources and extracting accurate information in a rapid manner. The vision Transformer is essentially an Encoder-Decoder structure composed of multi-head modules using an attention mechanism. Eq.2 depicts the process of the attention mechanism. V (=AWv ) is the output of the input A linear transformed by the weight Wv . In the visual image processing, A is a one-dimensional vector obtained by dividing the image into equal-sized patches like checkerboards, and then applying a convolution with the kernel size the same as the patch on the patches. 
+Key words:
+ 
+
+
+Section name: 3. Methodology (3.1. Outline of the proposed method)
+Paragraph: The proposed DeepMerge is the first to integrate deep learning and regionmerging to achieve desirable segmentation in VHR remote sensing images. Fig.2 summarizes the workflow of DeepMerge. We first partition the original image into tiles of the same size. These tiles are then over-segmented into the primitive segments by a standard segmentation method. Then we utilize a Siamese network [36, 37] to learn the similarity between neighbouring segments. The network is trained using a training set composed of positive and negative samples. Pairs of adjacent segments of the same object are called positive samples. On the contrary, pairs of neighbouring segments of different objects are negative samples. 
+Key words:
+ 
+Section name: 3.2. Sample collection for training DeepMerge
+Paragraph: To train the transformer-based Siamese network, we manually collected samples according to the following steps. We visually analysed the segments in the initial over-segmentation results, and determined the dominant categories in the study areas. Then, we selected neighbouring segments (Fig.3a) with high homogeneity serving as positive samples (Fig.3b), and neighbouring segments of different categories serving as negative samples (Fig.3c). It is worth noting that we need to collect more negative than positive samples to account for the large variety of possible discrepancies of two different regions. In VHR images, one object may contain high heterogeneous segments and different adjacent segments can contain similar pixels, leading to segmentation errors.
+Key words: 
+ 
+Section name: 3.3. Adaptive Siamese-transformer model
+Paragraph: To learn the similarity and discrepancy between neighbouring segments, we propose an adaptive Siamese-Transformer model. Siamese network is used for supervised contrastive learning [37]. The basic structure of the Siamese network is presented in the dashed box shown in Fig.2. The features of negative and positive samples can be extracted by a weight-shared backbone network. The similarity and the discrepancy are obtained by the loss function that calculates the distance in the feature space.The backbone of the framework is an improved vision Transformer with a proposed multi-level embedding module and segment-based feature embedding module. Relying on the multi-head attention module, the structure of the improved transformer is shown in Fig.6.
+Key words:
+
+
+
+
+Section name: 3.4. Merging criteria and feature updating
+Paragraph: Merging criteria are designed for calculating the similarity between segments, i.e., edge weight in the RAG-NNG model. We use the Euclidean distance of features from two neighbouring segments as the merging criteria in the proposed method: MC = f lef t i − f right i 2 (14) where MC is the distance of two group features, which is the similarity of two segments, recorded as the weight of the connected edge in the RAGNNG model. Conventional merging criteria updates edge weights of a newly merged segment by re-extracting features and re-calculating weights between the segment and its adjacent segments.
+Key words:
+ 
+Section name: 3.5. RAG-NNG model
+Paragraph: Following the graph structure, RAG is constructed by taking the initial segments as nodes and the connections between segments as edges. Each node stores the features of the corresponding segment, and each edge stores the feature distance between two nodes at its ends. Fig.8 describes the concept of a RAG model in a hypothetical over-segmented case. Based on the seven over-segmented segments (Fig.8a), a RAG (i.e., a nondirectional graph) is constructed. The nodes in Fig.8b represent segments from the original segmentation, and the edges between nodes depict the connections between segments. 
+Key words:
+ 
+Section name: 3.6. Segmentation accuracy estimation
+Paragraph: To validate the segmentation performance of the proposed DeepMerge, three groups of accuracy assessment metrics are applied, considering oversegmentation, under-segmentation, and whole segmentation performance. The first group of metrics includes precision, recall, and F value [42]. The second group of metrics includes the global over-segmentation error (GOSE), global under-segmentation error (GUSE), and total error (TE) [43]. The third group includes potential segmentation error (PSE), number of segments ratio (NSR), and Euclidean distance (ED2 ) [44]. These measurement 18 metrics require polygon segmentation results and vectorized reference objects, which have been proven to be effective and robust for measuring the local and global segmentation performance from various aspects.
+Key words:
+ 
+Section name: 4. Experimental Results (4.1. Dataset)
+Paragraph: The dataset used in this study covers nine cities that belong to the Phoenix city cluster, Arizona, U.S., including Phoenix, Glendale, Scottsdale, Tempe, Mesa, Chandler, Peoria, Surprise, and Goodyear. The images are composites from Google Earth [45] with a variety of sensors (e.g., WorldView, QuickBird, IKONOS, etc.) captured at different times. The image is 182, 272 × 102, 626 pixels(covering 5,660 km2 ) with 0.55-meter resolution and RGB bands encoded as 8-bit integral values. A variety of scenes are included, e.g., urban residential zones, urban green spaces, industrial zones, rural farmlands, water areas, and bare lands (Fig.9).
+Key words: 
+ 
+Section name: 4.2. Region-merging results
+Paragraph: For consistency, we set the shape, compactness, and scale parameters of MRS for initializing over-segmentation as 0.5, 0.5, and 25. Too many segments can lead to low efficiency of region-merging. The MRS with these parameters applied to segment minimum geo-objects in the dataset with little over-segmentation errors, maintaining a balance between over-segmentation errors and reducing segment number. Relying on the same initial oversegmentation and the same RAG-NNG model, ten bottom-to-top supervised and unsupervised methods are selected as competing algorithms, including MRS [16], Zhang2013 [11], Zhang2014a [9], Zhang2014b [24], Chen2015 [46], 21 Hu2017 [47], Yang2017 [12], Shen2019 [25], Zhang2020(fine and coarse) [26], Su2020 [31], and Lv2021 [1].
+Key words:
+ 
+Section name:  4.3. Segmentation results at different scales
+Paragraph: The final segmentation results of the proposed method can be derived by setting different scales. The segmentation evaluation metrics of precision, recall, F, and GOSE, GUSE, and TE of the proposed DeepMerge are presented in Fig.12, where the scales are set as 0.01, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, and 0.99. The curve of precision (red line in Fig.12a) tends to decrease slowly for scales from 0.0 to 0.7. After 0.7, however, the precision decrease sharply with the further increase of scales. The recall value of the proposed DeepMerge increases sharply when the scale is above 0.2. In comparison, the F values first increase and then decrease with the continuous increase of scales. The highest F value is achieved when the scale is 0.6, where all three curves intersect each other.
+Key words:
+ 
+Section name: 4.4. Image composition
+Paragraph: Segmentation remains to be a challenge in large-area VHR images processing. To address the issue, the large image has to be divided into small-size tiles. Image composition aims to merge the regions in the boundaries of these tiles to solve the edge effect [48]. Fig.13 presents four segmentation results for four cross-tile segmentation results covering four different typical landscapes. Images in the first column of Fig.13 are the initial segmentation results from MRS, where green and red colours are used to distinguish segments from two different images, and the number of the first column images (such as (5,7) and (5,8) in the first image) denote the location of this scene in the Phoenix city cluster dataset (Fig.9).
+Key words:
+ 
+Section name: 4.5. Ablation experiment
+Paragraph: The parameters involving margin value, training epoch number, batch size, and learning rate of DeepMerge are set to 1.0, 50, 20, and 0.001, respectively. The quantitative segmentation measures via nine evaluation metrics of ablation experiments are described in Table 3. “TF” denotes a model with direct implementation of a native vision Transformer (TF) without any adaptations. As expected, the TF model achieves unsatisfactory performance as it fails to consider the sizes of geo-objects. “TF+MLE” denotes a model with a multi-level embedding module (MLE) added to the TF.
+Key words:
+ 
+Section name: 5. Discussion 
+Paragraph: The proposed DeepMerge only takes 0.19% of the total number of segments as training to achieve desirable segmentation results. The optimal scale parameter value stabilizes between 0.4 and 0.7 in different landscapes. This makes the selection of the optimal parameter value easier for the user. Thus, DeepMerge overcomes scale selection, unlike other multi-scale segmentation methods. A closer-to-zero scale parameter denotes a high similarity while values close or greater than one, denote a low similarity. 
+Key words:
+
+
+10.            Document name: A technique to jointly estimate depth and depth uncertainty for unmanned aerial vehicles 
+Section name: INTRODUCTION
+Paragraph: One of the many applications of depth estimation is to replace depth sensors in autonomous vehicles for path planning [1] or obstacle avoidance [2], [3]. Such practice is common for small unmanned aerial vehicles (UAVs) as their size, weight and power constraints prevent the use of dedicated depth sensors. For such applications, being able to predict the quality of the estimates is essential to anticipate potentially erroneous data and take action accordingly. However, to the best of our knowledge, the task of joint depth and uncertainty estimation for drone-specific constraints, such as being robust to a wide variety of conditions and environments while being computationally lightweight enough to run in real-time on limited hardware, has not been addressed yet.
+
+
+Key words: 
+ 
+
+
+Section name: II. RELATED WORKS 
+Paragraph: Our M4Depth paper [4] already covers related works in depth estimation, and uncertainty in neural networks is well covered in the survey of Gawlikowski et al. [7]. Therefore, we focus on uncertainty estimation for pixel-wise computer vision regression tasks in this section. Kendall and Gal [8] showed that a part of the uncertainty in a deep neural network, called the aleatoric uncertainty, is due to the noise in the input data. They also showed that this part of the uncertainty can be estimated by training a network to learn the parameters of a probabilistic distribution that represents the noise in the output. 
+Key words:
+ 
+Section name: III. UNCERTAINTY ESTIMATION USING M4DEPTH
+Paragraph: In this section, we briefly remind the working principles of M4Depth [4] and explain how the network architecture can be modified to jointly estimate the parallax and its aleatoric uncertainty. We then detail how to get the uncertainty on depth from the uncertainty on the parallax. A. M4Depth working principles M4Depth is a multi-level pyramidal architecture where each level has the same structure and outputs a parallax estimate. The parallax ρ > 0 is linked to the depth z of a point P by the motion of the camera between two poses: 
+Key words:
+ 
+Section name: IV. EXPERIMENTS 
+Paragraph: In the experiments, we compare our elaborate approach for uncertainty estimation to (1) the probabilistic baseline in various conditions, and (2) existing methods on a benchmark for MVD methods. Before presenting the results, let us first describe the experimental setup.
+Key words:
+ 
+Section name: A. Experimental setup
+Paragraph: Datasets. We base our experiments on three datasets, namely Mid-Air [5], KITTI [6], and TartanAir [21]: we use Mid-Air to train and test the method in unstructured environments, KITTI for zero-shot transfer tests on real data in urban environments, and TartanAir for further tests either in urban or unstructured environments. We use the same splits and image resolution as for the original experiments for M4Depth [4]. Performance evaluation. The performance analysis is based on a subset of metrics proposed by Eigen et al. [22] for depth estimation, that is “Abs rel”, “RMSE log”, and δ < 1.25.
+Key words:
+ 
+Section name: B. Results
+Paragraph: M4Depth+Uρ vs M4Depth+Uz . In Section III, we explain how the probabilistic framework can be used as a baseline, referred as M4Depth+Uz, to get the uncertainty on depth estimates for M4Depth. We also propose a more elaborate method to get this uncertainty with M4Depth+Uρ. We trained our network with both methods on the Mid-Air dataset, and tested the performances in zero-shot transfer on various datasets. Some output results for M4Depth+Uρ are shown in Fig. 1. The results given in Table I and the sparsification error curves displayed in Fig. 3 show that estimating depth and uncertainty jointly with M4Depth works well.
+Key words:
+
+
+ 
+Section name: 
+Paragraph:
+Key words:
+ 
+Section name:
+Paragraph:
+Key words:
+ 
+Section name:
+Paragraph:
+Key words:
+ 
+Section name:
+Paragraph:
+Key words:
+
+
+Section name:
+Paragraph:
+Key words:
+ 
+Section name:
+Paragraph:
+Key words:
+ 
+Section name:
+Paragraph:
+Key words:
+ 
+Section name:
+Paragraph:
+Key words:
+
+
+
+
+
+
+
+
+
+
+
+
+________________
